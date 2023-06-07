@@ -51,16 +51,14 @@ class Distribution:
 
         self.b = self.Xv + sqrt(3) * self.sigma
 
-    def get_normal_theoretical_probability(self, interval):
-        t2 = (interval[1] - self.a) / self.sigma
-        t1 = (interval[0] - self.a) / self.sigma
-        return 0.5 * (erf(t2 / sqrt(2)) - erf(t1 / sqrt(2)))
+    def get_uniform_theoretical_probability(self, interval):
+        return self.uniform_distribution(interval[1]) - self.uniform_distribution(interval[0])
 
-    def get_normal_chi2(self):
+    def get_uniform_chi2(self):
         value = 0
         n = sum(self.N)
         for i in range(len(self.intervals)):
-            npi = n * self.get_normal_theoretical_probability(self.intervals[i])
+            npi = n * self.get_uniform_theoretical_probability(self.intervals[i])
             value += ((self.N[i] - npi) ** 2 / npi)
         return value
 

@@ -146,7 +146,7 @@ class MainWindow(QMainWindow):
         self.fillLineEdits()
         self.calculate_chi()
         self.calculate_probabilities()
-        self.plot_normal_density()
+        self.plot_uniform_density()
         self.plot_histopolygon()
         plt.show()
 
@@ -181,7 +181,7 @@ class MainWindow(QMainWindow):
         for i in range(len(self.distribution.W)):
             self.table.setItem(2, i, QTableWidgetItem(str(round(self.distribution.W[i], 3))))
             self.table.setItem(3, i, QTableWidgetItem(str(round(self.distribution.middles[i], 3))))
-            pi = self.distribution.get_normal_theoretical_probability(self.distribution.intervals[i])
+            pi = self.distribution.get_uniform_theoretical_probability(self.distribution.intervals[i])
             npi = pi * self.distribution.n_sum
             n_square = (npi - self.distribution.N[i]) ** 2
             chi_2 = n_square / npi
@@ -194,7 +194,7 @@ class MainWindow(QMainWindow):
         k = self.spin_box.value() - 3
         if k > 0 and self.distribution.sigma:
             chi2_crit = round(chi2.ppf(1 - alpha, k), 5)
-            chi2_exp = round(self.distribution.get_normal_chi2(), 5)
+            chi2_exp = round(self.distribution.get_uniform_chi2(), 5)
         self.labels2[0].setText(f"Количество степеней свободы k = (m - 3) = {k}")
         self.labels2[1].setText(f"X^2крит = {chi2_crit}")
         self.labels2[2].setText(f"X^2набл = Σ((ni-n`i) ^ 2 / n`i) = {chi2_exp}")
@@ -208,11 +208,11 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout()
         for i in self.distribution.intervals:
             label = QLabel()
-            label.setText(f"Теоретическая вероятность: {i} = {self.distribution.get_normal_theoretical_probability(i)}")
+            label.setText(f"Теоретическая вероятность: {i} = {self.distribution.get_uniform_theoretical_probability(i)}")
             layout.addWidget(label)
         self.third_tab_widget.setLayout(layout)
 
-    def plot_normal_density(self):
+    def plot_uniform_density(self):
         plot_data = self.distribution.process_uniform_density()
         fig, ax = plt.subplots(1, 1)
         ax.plot(plot_data[0], plot_data[1])
