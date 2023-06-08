@@ -181,7 +181,13 @@ class MainWindow(QMainWindow):
         for i in range(len(self.distribution.W)):
             self.table.setItem(2, i, QTableWidgetItem(str(round(self.distribution.W[i], 3))))
             self.table.setItem(3, i, QTableWidgetItem(str(round(self.distribution.middles[i], 3))))
-            pi = self.distribution.get_uniform_theoretical_probability(self.distribution.intervals[i])
+            if i == 0:
+                pi = self.distribution.get_uniform_theoretical_probability((self.distribution.a, self.distribution.intervals[i][1]))
+            elif i == len(self.distribution.W) - 1:
+                pi = self.distribution.get_uniform_theoretical_probability(
+                    (self.distribution.intervals[i][0], self.distribution.b))
+            else:
+                pi = self.distribution.get_uniform_theoretical_probability(self.distribution.intervals[i])
             npi = pi * self.distribution.n_sum
             n_square = (npi - self.distribution.N[i]) ** 2
             chi_2 = n_square / npi

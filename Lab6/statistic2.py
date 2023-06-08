@@ -52,13 +52,21 @@ class Distribution:
         self.b = self.Xv + sqrt(3) * self.sigma
 
     def get_uniform_theoretical_probability(self, interval):
-        return self.uniform_distribution(interval[1]) - self.uniform_distribution(interval[0])
+        a = 5
+        return self.uniform_distribution(interval[1]) * (interval[1] - interval[0])
 
     def get_uniform_chi2(self):
         value = 0
         n = sum(self.N)
         for i in range(len(self.intervals)):
-            npi = n * self.get_uniform_theoretical_probability(self.intervals[i])
+            if i == 0:
+                pi = self.get_uniform_theoretical_probability((self.a, self.intervals[i][1]))
+            elif i == len(self.W) - 1:
+                pi = self.get_uniform_theoretical_probability(
+                    (self.intervals[i][0], self.b))
+            else:
+                pi = self.get_uniform_theoretical_probability(self.intervals[i])
+            npi = n * pi
             value += ((self.N[i] - npi) ** 2 / npi)
         return value
 
@@ -71,6 +79,6 @@ class Distribution:
         if x < self.a:
             return 0
         if self.a <= x <= self.b:
-            return (x - self.a) / (self.b - self.a)
+            return 1 / (self.b - self.a)
         if x > self.b:
-            return 1
+            return 0

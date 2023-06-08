@@ -8,5 +8,12 @@
 
 
 with open("big.xml", "w") as f:
-    for i in range(1000):
-        print(f"")
+    print("<b>", file=f)
+    for i in range(500):
+        print(f"<a{str(i)}>", file=f)
+        for j in range(5000):
+            print(f"<a{str(i)}_{str(j)}>", file=f)
+        for j in range(4999, -1, -1):
+            print(f"</a{str(i)}_{str(j)}>", file=f)
+        print(f"</a{str(i)}>", file=f)
+    print("</b>", file=f)
